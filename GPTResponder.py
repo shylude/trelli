@@ -5,45 +5,66 @@ import time
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-def generate_response_from_transcript(transcript):
+MODEL = "gpt-4o-mini"
+MAX_TOKENS = 160
+
+
+def generate_response_from_transcript(transcript: str) -> str:
+    if not transcript.strip():
+        return ""
+
     try:
-        response = client.chat.completions.create(model="gpt-3.5-turbo-0301",
-        messages=[{"role": "system", "content": create_prompt(transcript)}],
-        temperature = 0.0)
+        resp = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": create_prompt(transcript)}
+            ],
+            temperature=0.0,
+            max_tokens=MAX_TOKENS,
+        )
+
+        content = resp.choices[0].message.content or ""
+
+        # If brackets exist, extract them
+        if "[" in content and "]" in content:
+            return content.split("[", 1)[1].split("]", 1)[0].strip()
+
+        # Otherwise return raw content
+        return content.strip()
+
     except Exception as e:
-        print(e)
-        return ''
-    full_response = response.choices[0].message.content
-    try:
-        return full_response.split('[')[1].split(']')[0]
-    except:
-        return ''
+        return f"OpenAI error: {str(e)}"
+
 
 class GPTResponder:
     def __init__(self):
         self.response = INITIAL_RESPONSE
-        self.response_interval = 2
+        self.response_interval = 1.0
+        self._last_transcript = ""
 
     def respond_to_transcriber(self, transcriber):
         while True:
-            if transcriber.transcript_changed_event.is_set():
-                start_time = time.time()
+            if not transcriber.transcript_changed_event.is_set():
+                time.sleep(0.15)
+                continue
 
-                transcriber.transcript_changed_event.clear()
-                transcript_string = transcriber.get_transcript()
-                response = generate_response_from_transcript(transcript_string)
+            transcriber.transcript_changed_event.clear()
+            transcript = transcriber.get_transcript()
 
-                end_time = time.time()  # Measure end time
-                execution_time = end_time - start_time  # Calculate the time it took to execute the function
+            if transcript == self._last_transcript:
+                time.sleep(0.15)
+                continue
 
-                if response != '':
-                    self.response = response
+            self._last_transcript = transcript
+            response = generate_response_from_transcript(transcript)
 
-                remaining_time = self.response_interval - execution_time
-                if remaining_time > 0:
-                    time.sleep(remaining_time)
-            else:
-                time.sleep(0.3)
+            if response:
+                self.response = response
+
+            time.sleep(self.response_interval)
 
     def update_response_interval(self, interval):
-        self.response_interval = interval
+        try:
+            self.response_interval = max(0.3, float(interval))
+        except Exception:
+            self.response_interval = 1.0

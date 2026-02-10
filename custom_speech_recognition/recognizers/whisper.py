@@ -43,4 +43,7 @@ def recognize_whisper_api(
     wav_data.name = "SpeechRecognition_audio.wav"
 
     transcript = client.audio.transcribe(model, wav_data, api_key=api_key)
-    return transcript.text
+    # transcript can be dict or object depending on whisper/OpenAI wrapper
+if isinstance(transcript, dict):
+    return transcript.get("text", "")
+return getattr(transcript, "text", "")

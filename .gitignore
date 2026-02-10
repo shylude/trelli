@@ -3,3 +3,15 @@ __pycache__/
 keys.py
 .venv/
 .DS_Store
+
+# local secrets
+keys.py
+
+# python junk
+.venv/
+__pycache__/
+*.pyc
+
+# local backups and scratch
+*.bak
+*_patched.py

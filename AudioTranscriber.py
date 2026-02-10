@@ -13,7 +13,7 @@ from datetime import timedelta
 import pyaudio
 from heapq import merge
 
-PHRASE_TIMEOUT = 3.05
+PHRASE_TIMEOUT = 1.2
 
 MAX_PHRASES = 10
 

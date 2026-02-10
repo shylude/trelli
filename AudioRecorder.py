@@ -10,9 +10,7 @@ RECORD_TIMEOUT = 3
 ENERGY_THRESHOLD = 1000
 DYNAMIC_ENERGY_THRESHOLD = False
 
-MBP_MIC_NAME = "MacBook Pro Microphone"
-PLANTRONICS_3220_MIC_NAME = "Plantronics Blackwire 3220 Series"
-HUMAN_MIC_NAME = PLANTRONICS_3220_MIC_NAME
+HUMAN_MIC_NAME = "External Microphone"
 # macOS specific, see README.md#macos for the details on how to configure the BlackHole device
 BLACKHOLE_MIC_NAME = "BlackHole 2ch"
 
