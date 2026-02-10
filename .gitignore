@@ -15,3 +15,10 @@ __pycache__/
 # local backups and scratch
 *.bak
 *_patched.py
+
+.venv/
+__pycache__/
+*.pyc
+keys.py
+*.bak
+*_patched.py
