@@ -1,24 +1,9 @@
-__pycache__/
-*.wav
 keys.py
-.venv/
+.env
+.venv
+__pycache__
 .DS_Store
-
-# local secrets
-keys.py
-
-# python junk
-.venv/
-__pycache__/
-*.pyc
-
-# local backups and scratch
-*.bak
-*_patched.py
-
-.venv/
-__pycache__/
-*.pyc
-keys.py
-*.bak
-*_patched.py
+build/
+dist/
+*.spec
+Trelli.dmg

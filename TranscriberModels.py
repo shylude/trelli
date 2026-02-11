@@ -1,10 +1,9 @@
 from openai import OpenAI
-from keys import OPENAI_API_KEY
 import whisper
 import os
 import torch
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 def get_model(use_api):
     if use_api:

@@ -1,9 +1,9 @@
+import os
 from openai import OpenAI
-from keys import OPENAI_API_KEY
 from prompts import create_prompt, INITIAL_RESPONSE
 import time
 
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 MODEL = "gpt-4o-mini"
 MAX_TOKENS = 160
